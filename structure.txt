@@ -1,0 +1,33 @@
+
+├── client/                     # React Frontend
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/             # Static files
+│   │   ├── components/         # Reusable UI (Buttons, Modals)
+│   │   ├── features/           # Domain-specific components (e.g., DefectTable, AuthForm)
+│   │   ├── hooks/              # Custom React hooks
+│   │   ├── services/           # Axios API calls
+│   │   ├── store/              # Zustand state stores
+│   │   ├── utils/              # Frontend helpers (date formatting, etc.)
+│   │   └── App.jsx
+│   ├── package.json
+│   └── vite.config.js
+├── server/                     # Node.js Backend
+│   ├── prisma/                 
+│   │   └── schema.prisma       # Database schema and ORM models
+│   ├── src/
+│   │   ├── config/             # Environment, DB connection, Logger setup
+│   │   ├── controllers/        # Request validation and HTTP response formatting
+│   │   ├── middlewares/        # Auth, error handling, rate limiting
+│   │   ├── routes/             # Express router definitions (RESTful paths)
+│   │   ├── services/           # Core business logic (DB calls, external APIs)
+│   │   ├── utils/              # Helper functions (Async handlers, Custom Error classes)
+│   │   └── server.js           # App entry point
+│   ├── tests/                  # Jest integration and unit tests
+│   ├── .env                    # Secure variables (NOT committed to Git)
+│   ├── .env.example            # Template for environment variables
+│   ├── package.json
+│   └── Dockerfile
+├── .gitignore
+├── docker-compose.yml
+└── README.md
