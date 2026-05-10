@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  users     User[]
+  defects   Defect[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(ANALYST)
+  tenantId     String
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+  defects      Defect[] @relation("AssignedDefects")
+  createdAt    DateTime @default(now())
+}
+
+model Defect {
+  id              String      @id @default(uuid())
+  type            String      // e.g., 'inclusion', 'crazing', 'scratch'
+  severity        Severity    @default(MODERATE)
+  status          Status      @default(OPEN)
+  confidenceScore Float?      // From automated inference (e.g., MAPTNet outputs)
+  bbox            Json?       // Bounding box coordinates [x, y, w, h]
+  detectedByModel String?     // e.g., 'MAPTNet-v1.0'
+  imageUrl        String?
+  tenantId        String
+  tenant          Tenant      @relation(fields: [tenantId], references: [id])
+  assignedToId    String?
+  assignedTo      User?       @relation("AssignedDefects", fields: [assignedToId], references: [id])
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+enum Role {
+  ADMIN
+  INSPECTOR
+  ANALYST
+}
+
+enum Severity {
+  CRITICAL
+  HIGH
+  MODERATE
+  LOW
+}
+
+enum Status {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  FALSE_POSITIVE
+}
